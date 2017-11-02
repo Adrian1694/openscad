@@ -16,8 +16,8 @@ module baza_pahar(raza_baza,grosime_baza)
 
 module picior_pahar(raza_picior,inaltime_picior)
 {
-//    cylinder(h=inaltime_picior,r=raza_picior);
-    linear_extrude(height = inaltime_picior, twist = 180, slices = 1000) square([2 * raza_picior, 2 * raza_picior], center = true);
+    linear_extrude(height = inaltime_picior, twist = 180,slices=100) square([2*raza_picior,2*raza_picior],center=true);
+    //cylinder(h=inaltime_picior,r=raza_picior,$fn=4);
 }//end picior_pahar
 
 //------------------------------
@@ -39,39 +39,44 @@ for(i=[0:numar_pahare-1])
         translate([i*(50*2 + 3),0,0]) pahar_sampanie(raza_baza=40,grosime_baza=3,raza_picior=2,inaltime_picior=100,raza_cupa=50,            grosime_perete_cupa=2);
 
     }
-module pahare_in_matrice(numar_pahare_x,numar_pahare_y)
+module pahare_matrice(numar_pahare_x,numar_pahare_y)
 { 
-for(j=[0:numar_pahare_y-1])   
-    translate([0,j*(50*2 + 3),0]) pahare_sir(numar_pahare_x);
+for(i=[0:numar_pahare_y-1])   
+    translate([0,i*(50*2 + 3),0]) pahare_sir(numar_pahare_x);
 
     }
-module pahare_pe_cerc(nr_pahare, raza_cerc)
-    {
-        pas = 360 / nr_pahare;
-        echo(pas = pas);
-        echo(nr_pahare = nr_pahare);
-        echo(raza_cerc = raza_cerc);
-        
-        for (i = [0 : 360 / nr_pahare: 360 - 1])
-            rotate([0, 0, i])
-        translate([raza_cerc, 0, 0])
-        pahar_sampanie(raza_baza=40,grosime_baza=3,raza_picior=2,inaltime_picior=100,raza_cupa=50,            grosime_perete_cupa=2);
-
-    }
-    //...............................
-    module grup_pahare(tip)
-   { 
-    if (tip == "cerc")
-        pahare_pe_cerc(nr_pahare = 10, raza_cerc = 200);
-    else     
-        if (tip == "sir")
-        pahare_in_sir(10);
-    else
-        if (tip == "matrice")
-            pahare_in_matrice(nr_pahare_x = 5, nr_pahare_y = 7);
-    else
-        echo("tip necunoscut");
-   }
-//pahare_in_matrice(10,5);
-//pahare_pe_cerc(nr_pahare = 10, raza_cerc = 200);
-   grup_pahare(tip = "matrice");
+   
+module pahare_pe_cerc(nr_pahare,raza_cerc)
+   {
+       pas=360/nr_pahare;
+       
+       echo (pas = pas);
+       echo (nr_pahare = nr_pahare);
+       echo (raza_cerc = raza_cerc);
+       
+       for(i=[0:pas:360-1]){
+       rotate([0,0,i])
+       translate([raza_cerc,0,0])
+       pahar_sampanie(raza_baza=40,grosime_baza=3,raza_picior=2,inaltime_picior=100,raza_cupa=50,            grosime_perete_cupa=2);
+       }
+       
+   } 
+    
+module grup_pahare(tip)
+   {
+       if(tip == "cerc")
+           pahare_pe_cerc(nr_pahare=10,raza_cerc=200);
+       else
+           if(tip=="sir")
+          pahare_sir(10); 
+            else   
+                if(tip=="matrice")
+                     pahare_matrice(4,3);
+                else
+                    echo("tip necunoscut");
+           
+       
+       }
+//pahare_matrice(1,1);
+//pahare_pe_cerc(nr_pahare=10,raza_cerc=200);
+ grup_pahare("matrice");  
