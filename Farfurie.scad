@@ -1,4 +1,5 @@
 module farfurie(inaltime_farfurie, raza_baza_farfurie, raza_sus_farfurie, raza_buza, inaltime_buza, grosime_perete)
+color("Blue")
 {
    difference(){
     union(){
